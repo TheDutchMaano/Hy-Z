@@ -1,26 +1,25 @@
-:root{
-  --bg:#0b0f12;
-  --muted:#9aa5ad;
-  --accent:#d94b3b;
-  --card:#0f1416;
-}
+/* Minimal styles for 'Coming Soon' page */
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,system-ui,Segoe UI,Helvetica,Arial;color:#e6eef2;background:linear-gradient(180deg,#071014 0%,#0b0f12 60%);}
-.container{max-width:1000px;margin:0 auto;padding:2rem}
-.site-header{background:rgba(0,0,0,0.2);backdrop-filter:blur(4px);}
-.site-header .container{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem}
-.logo{color:var(--accent);margin:0;font-size:1.5rem}
-.nav a{color:var(--muted);text-decoration:none;margin-left:1rem}
-.hero{padding:6rem 0 4rem;color:#fff;text-align:center;background-image:radial-gradient(ellipse at center, rgba(217,75,59,0.06), transparent 30%)}
-.hero h2{font-size:2.2rem;margin:0 0 .5rem}
-.tag{color:var(--muted);max-width:700px;margin:0 auto 1.25rem}
-.actions{display:flex;gap:1rem;justify-content:center}
-.btn{display:inline-block;padding:.6rem 1rem;border-radius:6px;background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.08);text-decoration:none}
-.btn.primary{background:linear-gradient(90deg,var(--accent),#ff7a61);border:none}
-.features{padding:2.5rem 0}
-.features h3{color:#fff}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:1rem}
-.grid article{background:var(--card);padding:1rem;border-radius:8px;color:var(--muted)}
-.cta{background:linear-gradient(90deg,rgba(217,75,59,0.06),transparent);padding:2rem;border-radius:8px;text-align:center}
-.site-footer{padding:1.25rem 0;color:var(--muted);font-size:.9rem}
-@media(min-width:768px){.hero h2{font-size:3rem}}
+:root{--bg:#050607;--text:#e8eef0;--accent1:#d94b3b;--accent2:#ff7a61}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Helvetica,Arial;background:radial-gradient(ellipse at center,#071014 0%,var(--bg) 60%);color:var(--text);height:100vh;display:flex;align-items:center;justify-content:center}
+.coming-wrap{text-align:center;padding:2rem}
+.coming{font-size:clamp(2.25rem,8vw,6rem);letter-spacing:.02em;margin:0;display:flex;justify-content:center;align-items:center;gap:.35rem}
+.coming .type{position:relative;display:inline-block;overflow:hidden;white-space:nowrap;border-right:.12em solid rgba(232,238,240,0.15);padding-right:.6rem;line-height:1.15;padding-bottom:0.12em;vertical-align:bottom}
+.coming .type::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--accent1),var(--accent2));mix-blend-mode:overlay;opacity:.9}
+.sub{color:rgba(232,238,240,0.65);margin-top:.6rem}
+
+/* typing animation */
+@keyframes typing{from{width:0}to{width:100%}}
+@keyframes blink{50%{border-color:transparent}}
+.coming .type{width:11ch;animation:typing 2.4s steps(11,end) 0s 1 normal both,blink .8s step-end infinite,hideCaret .25s linear 2.4s forwards}
+
+@keyframes hideCaret{to{border-right-color:transparent;border-right-width:0px}}
+
+@keyframes bob{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+
+
+/* subtle glow */
+.coming .type::selection{background:transparent}
+
+@media (prefers-reduced-motion: reduce){.coming .type{animation:none;border-right:none}}
+
