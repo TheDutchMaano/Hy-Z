@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hy-Z | Enoch</title>
+    <style>
+        :root {
+            --bg: #222;
+            --panel: #2b2b2b;
+            --panel-header: #1f1f1f;
+            --border: #555;
+            --text: #ddd;
+            --link: #ffa500;
+            --danger: #8b0000;
+            --warn: #ffc04d;
+            --ok: #55ff55;
+            --muted: #b8b8b8;
+            --wood: #3d2b1f;
+            --stone: #2a2a2a;
+            --withered: #777;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: radial-gradient(circle at center, #303030 0%, #222 45%, #181818 100%);
+            color: var(--text);
+            line-height: 1.5;
+            position: relative;
+            box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.78);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 4px),
+                repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.035) 0, rgba(0, 0, 0, 0.035) 1px, transparent 1px, transparent 3px);
+            opacity: 0.22;
+            z-index: 0;
+        }
+
+        a {
+            color: var(--link);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            background: linear-gradient(180deg, #313131 0%, var(--stone) 100%);
+            border: 4px double var(--wood);
+            box-shadow: inset 0 0 0 1px #5a4334, 0 18px 45px rgba(0, 0, 0, 0.45);
+            position: relative;
+            z-index: 1;
+        }
+
+        .title {
+            margin: 0;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.11em;
+            text-shadow: -1px -1px 0 #6a6156, 1px 1px 0 #0f0f0f, 0 2px 8px rgba(0, 0, 0, 0.55);
+        }
+
+        .title-rule {
+            border: 0;
+            border-top: 1px solid var(--border);
+            margin: 0.7rem 0 0.45rem;
+        }
+
+        .jump-links {
+            margin: 0 0 1.4rem;
+            font-size: 0.85rem;
+            color: var(--link);
+        }
+
+        .jump-links a {
+            display: inline-block;
+            margin-left: 0.35rem;
+            padding: 0.2rem 0.48rem;
+            border: 2px solid #2d2117;
+            background: linear-gradient(180deg, #4d3827 0%, #342418 100%);
+            color: #ffbf47;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            box-shadow: inset 0 1px 0 rgba(255, 217, 153, 0.18);
+        }
+
+        .jump-links a:hover {
+            text-decoration: none;
+            color: #fff3d1;
+            border-color: #8b0000;
+            box-shadow: 0 0 0 1px #8b0000, inset 0 1px 0 rgba(255, 200, 120, 0.35);
+        }
+
+        .intro-row {
+            display: flex;
+            gap: 1.2rem;
+            align-items: flex-start;
+            margin-bottom: 1.4rem;
+        }
+
+        .intro-copy {
+            flex: 2;
+            min-width: 260px;
+            opacity: 0.9;
+        }
+
+        .intro-copy p {
+            margin: 0;
+            color: var(--text);
+        }
+
+        .thumb-box {
+            flex: 1;
+            min-width: 240px;
+            max-width: 340px;
+            border: 4px double var(--wood);
+            background: linear-gradient(180deg, #2f2f2f 0%, #252525 100%);
+            box-shadow: inset 0 0 0 1px #5d4535, 0 6px 18px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: visible;
+        }
+
+        .thumb-box::before,
+        .thumb-box::after {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #a7875f;
+            pointer-events: none;
+        }
+
+        .thumb-box::before {
+            top: -8px;
+            left: -8px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .thumb-box::after {
+            right: -8px;
+            bottom: -8px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .thumb-box img {
+            width: 100%;
+            display: block;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .zoomable {
+            cursor: zoom-in;
+            transition: transform 0.25s ease, filter 0.25s ease;
+            transform-origin: center center;
+        }
+
+        .zoomable:hover {
+            transform: scale(1.04);
+            filter: brightness(1.05);
+        }
+
+        .thumb-caption {
+            margin: 0;
+            padding: 0.5rem 0.65rem;
+            font-size: 0.9rem;
+            color: #fff;
+            background: #352d24;
+        }
+
+        .subtitle {
+            margin: 0 0 0.8rem;
+            color: #fff;
+            font-size: 1.45rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .lore-copy {
+            margin-bottom: 1rem;
+        }
+
+        .lore-panel {
+            border: 3px double var(--wood);
+            background: linear-gradient(180deg, #2a2a2a 0%, #252525 100%);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: inset 0 0 0 1px #5d4535;
+        }
+
+        .lore-lead {
+            margin: 0 0 0.9rem;
+            padding: 0.75rem 0.9rem;
+            border-left: 3px solid var(--link);
+            background: #1f1f1f;
+            color: #f0f0f0;
+        }
+
+        .lore-article {
+            max-width: 78ch;
+            margin: 0 auto;
+            padding: 0.9rem 1rem;
+            background: #202020;
+            border: 1px solid #494949;
+            border-radius: 5px;
+        }
+
+        .lore-heading {
+            margin: 1rem 0 0.5rem;
+            color: var(--link);
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            border-bottom: 1px solid #3f3f3f;
+            padding-bottom: 0.3rem;
+        }
+
+        .lore-article p {
+            margin: 0.65rem 0;
+            color: #dddddd;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .lore-article p:first-of-type::first-letter {
+            float: left;
+            font-size: 2.1rem;
+            line-height: 1;
+            padding-right: 0.35rem;
+            color: #f0f0f0;
+            font-weight: 700;
+        }
+
+        .lore-list {
+            margin: 0.5rem 0 0.6rem;
+            padding-left: 1.2rem;
+            line-height: 1.65;
+        }
+
+        .lore-list li {
+            margin: 0.3rem 0;
+        }
+
+        .lore-highlight {
+            margin: 0.9rem auto 0;
+            padding: 0.8rem 0.9rem;
+            border: 1px solid #5b4a2a;
+            border-radius: 5px;
+            background: #2a2418;
+            color: #f0e6cc;
+            max-width: 78ch;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0.9rem;
+            padding: 0.9rem;
+            background: #252525;
+            border: 3px double var(--wood);
+            border-radius: 6px;
+            box-shadow: inset 0 0 0 1px #5d4535;
+        }
+
+        .gallery-item {
+            margin: 0;
+            background: #1f1f1f;
+            border: 1px solid #4a4a4a;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 170px;
+            display: block;
+            object-fit: cover;
+            border-bottom: 1px solid #4a4a4a;
+        }
+
+        .gallery-item figcaption {
+            margin: 0;
+            padding: 0.45rem 0.55rem;
+            font-size: 0.85rem;
+            color: #f2f2f2;
+            background: #303030;
+        }
+
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: min(96vw, 1600px);
+            max-height: 90vh;
+            width: auto;
+            height: auto;
+            border: 1px solid #666;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.1rem;
+            width: 2rem;
+            height: 2rem;
+            border: 1px solid #888;
+            background: #272727;
+            color: #fff;
+            font-size: 1.2rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .lightbox-close:hover {
+            background: #3a3a3a;
+        }
+
+        .tables-wrap {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 4px double var(--wood);
+            background: linear-gradient(180deg, #2e2e2e 0%, #272727 100%);
+            box-shadow: inset 0 0 0 1px #5d4535;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border);
+            padding: 0.5rem 0.6rem;
+            font-size: 0.95rem;
+            vertical-align: middle;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.55);
+        }
+
+        th {
+            background: linear-gradient(180deg, #36251e 0%, #2a1e17 100%);
+            color: #fff;
+            text-align: left;
+            box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .label {
+            color: var(--link);
+            width: 45%;
+            font-weight: 600;
+        }
+
+        .value-danger {
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        .value-warn {
+            color: var(--warn);
+            font-weight: 700;
+        }
+
+        .value-ok {
+            color: var(--ok);
+            font-weight: 700;
+        }
+
+        .value-muted {
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .tables-wrap table:nth-child(2) td.value-danger {
+            color: var(--withered);
+        }
+
+        .tables-wrap table:nth-child(2) td.value-ok {
+            color: var(--ok);
+        }
+
+        .resource-icon {
+            width: 2rem;
+            text-align: center;
+            color: var(--link);
+            font-weight: 700;
+        }
+
+        .status {
+            width: 2rem;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .available {
+            color: var(--ok);
+        }
+
+        .unavailable {
+            color: var(--withered);
+        }
+
+        @media (max-width: 900px) {
+            .intro-row {
+                flex-direction: column;
+            }
+
+            .thumb-box {
+                max-width: 100%;
+            }
+
+            .tables-wrap {
+                grid-template-columns: 1fr;
+            }
+
+            .lore-article {
+                padding: 0.8rem 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <h1 class="title">Enoch</h1>
+        <hr class="title-rule">
+
+        <p class="jump-links">
+            Jump to:
+            <a href="#navigation">navigation</a>,
+            <a href="#search">search</a>
+        </p>
+
+        <section class="intro-row">
+            <article class="intro-copy lore-copy">
+                <p>
+                    Meteora is a series of ancient monasteries perched atop high, pillared mountains.
+                    Once a place of religious practice, it transitioned into a military training ground where monks defended against undead threats before falling into ruin and corruption. 
+                    The peaks remain interconnected by precarious rope lines, hiding valuable loot and a legendary chest within its fractured, undead-infested halls.
+                </p>
+            </article>
+
+            <figure class="thumb-box">
+                <img class="zoomable" src="../assets/Meteora/meteora.png" alt="Meteora viewed from the south-east, showing the towering rock formations and the rope lines connecting them. The central complex is visible, with its ruined structures and the surrounding undead-infested landscape.">
+                <figcaption class="thumb-caption">Aerial picture of Meteora at sunset.</figcaption>
+            </figure>
+        </section>
+
+        <section class="tables-wrap">
+            <table aria-label="Location Information">
+                <thead>
+                    <tr>
+                        <th colspan="2">Location Information</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label">Coordinates</td>
+                        <td class="value-muted">X: 617, Z: 787</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Area Type</td>
+                        <td class="value-warn">Rural Ruins</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Mob Threat</td>
+                        <td class="value-danger">Very High</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Bandit Threat</td>
+                        <td class="value-danger">High</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Number of Chests</td>
+                        <td class="value-muted">20</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Water Source</td>
+                        <td class="value-ok">Yes</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Clean Water Source</td>
+                        <td class="value-danger">No</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Fireplace</td>
+                        <td class="value-danger">No</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Chef's Stove</td>
+                        <td class="value-danger">No</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Workbench</td>
+                        <td class="value-danger">No</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table aria-label="General Resources">
+                <thead>
+                    <tr>
+                        <th colspan="3">Available Loot</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label">🍎 Food</td>
+                        <td class="value-danger">✗</td>
+                    </tr>
+                    <tr>
+                        <td class="label">🥛 Civilian | Tier 1</td>
+                        <td class="value-danger">✗</td>
+                    </tr>
+                    <tr>
+                        <td class="label">✂️ Civilian | Tier 2</td>
+                        <td class="value-danger">✗</td>
+                    </tr>
+                    <tr>
+                        <td class="label">🛠️ Civilian | Tier 3</td>
+                        <td class="value-ok">4</td>
+                    </tr>
+                    <tr>
+                        <td class="label">🛡️ Military | Tier 1</td>
+                        <td class="value-danger">✗</td>
+                    </tr>
+                    <tr>
+                        <td class="label">⚔️ Military | Tier 2</td>
+                        <td class="value-ok">4</td>
+                    </tr>
+                    <tr>
+                        <td class="label">🏹 Military | Tier 3</td>
+                        <td class="value-ok">11</td>
+                    </tr>
+                    <tr>
+                        <td class="label">🌟 Legendary</td>
+                        <td class="value-ok">✔</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <hr class="title-rule">
+        <h2 class="subtitle">Lore</h2>
+        <section class="lore-panel" aria-label="Meteora lore">
+            <p class="lore-lead">
+                Where the earth reaches toward the heavens in jagged limestone fingers, there lies Meteora: once a bastion of spiritual enlightenment, now a gravity-defying graveyard and a warning etched in stone.
+            </p>
+
+            <article class="lore-article">
+                <h3 class="lore-heading">History</h3>
+                <p>
+                    In ages past, Meteora's monasteries were silent retreats where monks sought communion with the celestial. When the undead began to spread, prayer gave way to steel. Cloisters became barracks, scripture became military doctrine, and the warrior-monks learned to turn rope lines and sheer elevation into living weapons against the horrors below.
+                </p>
+                <p>
+                    The downfall of Meteora did not come through siege, but through ambition. The High Sensei, consumed by dominion, redirected the order toward darker goals and assembled his infamous gallery of God-Trophies in the central complex.
+                </p>
+
+                <h3 class="lore-heading">God-Trophies</h3>
+                <ul class="lore-list">
+                    <li>The severed, frost-veined head of the Ice Dragon.</li>
+                    <li>The four Elemental Spirits, slain and framed.</li>
+                    <li>The legendary Hedera, a being of immense, quiet power.</li>
+                </ul>
+
+                <h3 class="lore-heading">The Hedera</h3>
+                <p>
+                    The Hedera was the Sensei's ultimate prize. Rumors claim it carries the Void-Command: the power to tear reality, summon creatures from the Void, and bend them to its will. Yet this power is bound to Murky Water. On these dry, windswept peaks, the Hedera remains petrified, dormant, and waiting for a single drop of corruption.
+                </p>
+
+                <h3 class="lore-heading">Present Day</h3>
+                <p>
+                    The Undead Takeover has turned holy halls into rotting corridors. The old cart system that once linked the spires is long dead, leaving only precarious rope lines between cliffs. Still, adventurers come for the legendary chest, high-value relics, and the remains of sentinels that continue their eternal, forgotten duty.
+                </p>
+            </article>
+
+            <p class="lore-highlight">
+                To step onto Meteora's ropes is to walk the line between incredible wealth and an eternal fall into the fog. Proceed with caution: the Void is listening, and the Hedera is only a flood away from waking.
+            </p>
+        </section>
+        <hr class="title-rule">
+        <h2 class="subtitle">Gallery</h2>
+
+        <section class="gallery-grid" aria-label="Meteora image gallery">
+            <figure class="gallery-item">
+                <img class="zoomable" src="../assets/Meteora/meteorabyday.png" alt="Meteora by day">
+                <figcaption>Meteora by day</figcaption>
+            </figure>
+            <figure class="gallery-item">
+                <img class="zoomable" src="../assets/Meteora/meteorabrokenbuilding.png" alt="Broken structure near Meteora">
+                <figcaption>Broken building remains</figcaption>
+            </figure>
+            <figure class="gallery-item">
+                <img class="zoomable" src="../assets/Meteora/meteorahedera.png" alt="The Hedera chamber in Meteora">
+                <figcaption>The Hedera chamber</figcaption>
+            </figure>
+            <figure class="gallery-item">
+                <img class="zoomable" src="../assets/Meteora/meteoraicedragon.png" alt="Ice Dragon trophy in Meteora">
+                <figcaption>Ice Dragon trophy</figcaption>
+            </figure>
+            <figure class="gallery-item">
+                <img class="zoomable" src="../assets/Meteora/meteoramainbuilding.png" alt="Main building of Meteora">
+                <figcaption>Main building</figcaption>
+            </figure>
+            <figure class="gallery-item">
+                <img class="zoomable" src="../assets/Meteora/meteoraontheropes.png" alt="Rope routes between Meteora peaks">
+                <figcaption>Rope routes between peaks</figcaption>
+            </figure>
+        </section>
+
+        <div class="lightbox" id="lightbox" aria-hidden="true">
+            <button class="lightbox-close" id="lightboxClose" aria-label="Close fullscreen image">x</button>
+            <img class="lightbox-content" id="lightboxImage" src="" alt="Fullscreen preview">
+        </div>
+    </main>
+
+    <script>
+        (function () {
+            var zoomableImages = document.querySelectorAll('.zoomable');
+            var lightbox = document.getElementById('lightbox');
+            var lightboxImage = document.getElementById('lightboxImage');
+            var lightboxClose = document.getElementById('lightboxClose');
+
+            function openLightbox(src, alt) {
+                lightboxImage.src = src;
+                lightboxImage.alt = alt || 'Fullscreen image';
+                lightbox.classList.add('active');
+                lightbox.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeLightbox() {
+                lightbox.classList.remove('active');
+                lightbox.setAttribute('aria-hidden', 'true');
+                lightboxImage.src = '';
+                document.body.style.overflow = '';
+            }
+
+            zoomableImages.forEach(function (img) {
+                img.addEventListener('click', function () {
+                    openLightbox(img.src, img.alt);
+                });
+            });
+
+            lightboxClose.addEventListener('click', closeLightbox);
+
+            lightbox.addEventListener('click', function (event) {
+                if (event.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && lightbox.classList.contains('active')) {
+                    closeLightbox();
+                }
+            });
+        }());
+    </script>
+</body>
+</html>
