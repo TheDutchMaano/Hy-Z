@@ -1,12 +1,35 @@
-/* Minimal styles for 'Coming Soon' page */
+/* Shared styles for the Hy-Z landing pages */
 *{box-sizing:border-box}
-:root{--bg:#050607;--text:#e8eef0;--accent1:#d94b3b;--accent2:#ff7a61}
-body{margin:0;font-family:Inter,system-ui,Segoe UI,Helvetica,Arial;background:radial-gradient(ellipse at center,#071014 0%,var(--bg) 60%);color:var(--text);height:100vh;display:flex;align-items:center;justify-content:center}
-.coming-wrap{text-align:center;padding:2rem}
+:root{--bg:#050607;--text:#e8eef0;--accent1:#d94b3b;--accent2:#ff7a61;--panel:rgba(5,6,7,0.78);--panel-border:rgba(255,255,255,0.14)}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Helvetica,Arial;background:radial-gradient(ellipse at center,#071014 0%,var(--bg) 60%);color:var(--text);min-height:100vh}
+body.coming-body{display:flex;flex-direction:column}
+.site-bar{width:100%;background:linear-gradient(180deg,#3b2d24 0%,#2f2219 100%);border-bottom:3px double #3d2b1f;box-shadow:0 6px 18px rgba(0,0,0,.6)}
+.site-bar-inner{max-width:1100px;margin:0 auto;padding:.7rem 1.5rem;display:flex;align-items:center;gap:1rem}
+.site-brand{color:#ffdca8;font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.95rem}
+.site-nav{margin-left:auto;display:flex;flex-wrap:wrap;gap:.5rem}
+.nav-button,.action-button{display:inline-block;padding:.4rem .75rem;color:#ffe9c9;background:linear-gradient(180deg,#4b3726 0%,#382717 100%);border:1px solid rgba(0,0,0,.6);border-radius:4px;text-transform:uppercase;font-weight:700;font-size:.82rem;letter-spacing:.06em;text-decoration:none;transition:transform .2s ease,color .2s ease,border-color .2s ease}
+.nav-button:hover,.action-button:hover{transform:translateY(-2px);color:#fff;border-color:var(--accent2);text-decoration:none}
+.nav-button.active{border-color:var(--accent2);background:linear-gradient(180deg,#5a3f2c 0%,#3a271b 100%)}
+.coming-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem}
+.hero-card{width:min(100%,780px);text-align:center;padding:2rem 2.5rem;border:1px solid var(--panel-border);border-radius:18px;background:var(--panel);box-shadow:0 16px 40px rgba(0,0,0,.35)}
 .coming{font-size:clamp(2.25rem,8vw,6rem);letter-spacing:.02em;margin:0;display:flex;justify-content:center;align-items:center;gap:.35rem}
 .coming .type{position:relative;display:inline-block;overflow:hidden;white-space:nowrap;border-right:.12em solid rgba(232,238,240,0.15);padding-right:.6rem;line-height:1.15;padding-bottom:0.12em;vertical-align:bottom}
 .coming .type::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--accent1),var(--accent2));mix-blend-mode:overlay;opacity:.9}
 .sub{color:rgba(232,238,240,0.65);margin-top:.6rem}
+.cta-row{display:flex;justify-content:center;flex-wrap:wrap;gap:1rem;margin-top:1.2rem}
+.action-button.secondary{background:linear-gradient(180deg,#3a5f60 0%,#274b4d 100%)}
+.page{max-width:1100px;margin:2rem auto;padding:1.5rem;background:linear-gradient(180deg,#313131 0%,#222 100%);border:4px double #3d2b1f;box-shadow:inset 0 0 0 1px #5a4334, 0 18px 45px rgba(0,0,0,0.45)}
+.page--wide{max-width:1200px}
+.title{margin:0;font-size:clamp(2rem,4vw,3rem);color:#fff;font-weight:700;text-transform:uppercase;letter-spacing:.11em;text-shadow:-1px -1px 0 #6a6156, 1px 1px 0 #0f0f0f, 0 2px 8px rgba(0,0,0,0.55)}
+.thumb-box{margin:1.2rem 0 0;border:4px double #3d2b1f;background:linear-gradient(180deg,#2f2f2f 0%,#252525 100%);box-shadow:inset 0 0 0 1px #5d4535, 0 6px 18px rgba(0,0,0,0.4);overflow:hidden}
+.thumb-box--wide{max-width:900px}
+.thumb-box img{width:100%;display:block}
+.zoomable{cursor:zoom-in;transition:transform .25s ease,filter .25s ease;transform-origin:center center}
+.zoomable:hover{transform:scale(1.04);filter:brightness(1.05)}
+.thumb-caption{margin:0;padding:.55rem .7rem;font-size:.9rem;color:#fff;background:#352d24}
+.location-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem;margin-top:1.2rem}
+.location-card{display:block;padding:.85rem 1rem;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.05);color:#f2e6d1;text-decoration:none;transition:transform .2s ease,border-color .2s ease,background .2s ease}
+.location-card:hover{transform:translateY(-2px);border-color:var(--accent2);background:rgba(255,255,255,.09);text-decoration:none}
 
 /* typing animation */
 @keyframes typing{from{width:0}to{width:100%}}
@@ -15,11 +38,9 @@ body{margin:0;font-family:Inter,system-ui,Segoe UI,Helvetica,Arial;background:ra
 
 @keyframes hideCaret{to{border-right-color:transparent;border-right-width:0px}}
 
-@keyframes bob{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
-
-
 /* subtle glow */
 .coming .type::selection{background:transparent}
 
-@media (prefers-reduced-motion: reduce){.coming .type{animation:none;border-right:none}}
+@media (max-width:640px){.site-bar-inner{padding:.55rem .9rem}.hero-card{padding:1.5rem 1.1rem}.cta-row{flex-direction:column;align-items:stretch}.location-list{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){.coming .type{animation:none;border-right:none}.nav-button:hover,.action-button:hover,.zoomable:hover{transform:none}}
 
