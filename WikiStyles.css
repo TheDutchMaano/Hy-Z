@@ -352,6 +352,32 @@
             background: #3a3a3a;
         }
 
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            width: 2.5rem;
+            height: 3.5rem;
+            transform: translateY(-50%);
+            border: 1px solid #888;
+            background: #272727;
+            color: #fff;
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .lightbox-nav:hover {
+            background: #3a3a3a;
+        }
+
+        .lightbox-prev {
+            left: 1rem;
+        }
+
+        .lightbox-next {
+            right: 1rem;
+        }
+
         .tables-wrap {
             display: grid;
             grid-template-columns: repeat(2, minmax(280px, 1fr));
